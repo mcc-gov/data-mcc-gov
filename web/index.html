@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
@@ -147,7 +148,6 @@
 				fitness for a particular use; nor are any such warranties to be implied or inferred with respect to the information or data furnished herein. 
 				The data is subject to change as modifications and updates are complete. It is understood that the information contained in the dataset is 
 				being used at one's own risk.</p>
-	        <p>Millennium Challenge Corporation 2012</p>
 	      </div>
 
 
@@ -189,7 +189,25 @@
  <script src="lib/underscore-min.js"></script>
  <script src="lib/backbone-min.js"></script>
 
- <script src="index.json"></script>
+
+<script>
+var getIndex = (function () {
+    var json = null;
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': '/raw/index.json',
+        'dataType': "json",
+        'success': function (data) {
+            json = data;
+        }
+    });
+    return json;
+})(); 
+var index=getIndex;
+</script>
+
+
 
 	<script id="documentCategoryTemplate" type="text/template">
 	    <h3><%= name %></h3>
@@ -235,7 +253,7 @@
 		<tr>
 			<td><%= name %></td>
 			<td><%= description %></td>
-			<td><a href="<%= location %>" class="label label-success"><%= formats %></a></td>
+			<td><a href="/raw<%= group_location %><%= location %>" class="label label-success"><%= formats %></a></td>
 			<td><a href="/meta/" class="label">.html</a></td>
 		</tr>	
 	</script>	
@@ -421,7 +439,7 @@
     
     
     <script type="text/javascript">
-	jQuery(document).ready(function($) {$('a.fancyzoom').fancyZoom();}); 
+	//jQuery(document).ready(function($) {$('a.fancyzoom').fancyZoom();}); 
 	</script>
     
     
