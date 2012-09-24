@@ -232,7 +232,7 @@ var index=getIndex;
 	    <table class="table table-striped"  >
 	    	<thead>
 				<tr>
-					<th>Description</th>
+					<th>Document</th>
 					<th>Download</th>
 				</tr>
 			</thead>
@@ -248,7 +248,6 @@ var index=getIndex;
 	    	<thead>
 				<tr>
 					<th>Dataset</th>
-					<th>Description</th>
 					<th>Download</th>
 					<th>Metadata</th>
 				</tr>
@@ -269,7 +268,6 @@ var index=getIndex;
 
 	<script id="machineReadableTemplate" type="text/template">
 		<tr>
-			<td><%= name %></td>
 			<td><%= description %></td>
 			<td><a href="/raw<%= group_location %><%= location %>" class="label label-success"><%= formats %></a></td>
 			<td><a href="/meta/" class="label">.html</a></td>
