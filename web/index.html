@@ -270,7 +270,7 @@ var index=getIndex;
 		<tr>
 			<td><%= description %></td>
 			<td><a href="/raw<%= group_location %><%= location %>" class="label label-success"><%= formats %></a></td>
-			<td><a href="/meta/" class="label">.html</a></td>
+			<td><a href="/raw<%= group_location %><%= metadatalocation %>" class="label">.html</a></td>
 		</tr>	
 	</script>	
 	<script>
@@ -282,6 +282,7 @@ var index=getIndex;
 		group_id: 0,
 		type: "",
 		location:"",
+		metadatalocation:"",
 		formats: "",
 		id: 0
 	});
