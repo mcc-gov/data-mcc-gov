@@ -4,9 +4,11 @@ app = Flask(__name__)
 
 """
 
-/selection/countries
-/selection/indicators
-/selection/indicator_categories
+#/selection/indicators
+#/selection/indicator_categories
+
+#/selection/selection_indicators
+#/selection/selection_indicators/<countrycode>
 
 #/selection/indicators_threshold
 
@@ -18,6 +20,8 @@ app = Flask(__name__)
 #/selection/lmic
 #/selection/lic
 
+#/selection/lmic/<countrycode>
+#/selection/lic/<countrycode>
 """
 
 fy13_data="../fy13/"
@@ -25,7 +29,66 @@ fy13_data="../fy13/"
 
 @app.route('/')
 def api_root():
-    return 'Welcome'
+	index=""
+	f=open("index.json")
+	index=f.read()
+	return index
+
+
+@app.route('/selection/indicators')
+def api_gni_limits():
+	list=[]
+	f=open(fy13_data+"indicators_fy13.csv")
+	for i, line in enumerate(f):
+		if len(line)<1 or i==0:
+			continue
+		indicator, category, description = line.strip().split(',',2)
+		list.append({"indicator":indicator, "category":category, "description":description})
+	f.close()
+	return json.dumps({"indicators":list}, sort_keys=True, indent=4)
+	
+@app.route('/selection/indicator_categories')
+def api_gni_limits():
+	list=[]
+	f=open(fy13_data+"indicator_categories_fy13.csv")
+	for i, line in enumerate(f):
+		if len(line)<1 or i==0:
+			continue
+		category, description = line.strip().split(',',1)
+		list.append({"category":category, "description":description})
+	f.close()
+	return json.dumps({"indicator_categories":list}, sort_keys=True, indent=4)
+
+@app.route('/selection/selection_indicators')
+def api_selection_indicators():
+	countries={}
+	list=[]
+	f=open(fy13_data+"selection_indicators_fy13.csv")
+	for i, line in enumerate(f):
+		if len(line)<1 or i==0:
+			continue
+		country, stuff = line.split(',',1)
+		countries[country]=True
+	f.close()
+	for country in countries.keys():
+		list.append({"country":country})
+	return json.dumps({"countries":list}, sort_keys=True, indent=4)
+
+
+@app.route('/selection/selection_indicators/<countrycode>')
+def api_selection_indicators_bycountry(countrycode):
+	list=[]
+	f=open(fy13_data+"selection_indicators_fy13.csv")
+	for i, line in enumerate(f):
+		if len(line)<1 or i==0:
+			continue
+		country, code, year, value, display, pr, se = line.split(',')
+		if countrycode.lower()==country.lower():
+			list.append({"indicator":code.lower().strip(), "value":value.strip(), "display":display.strip(), "pr":pr.strip(), "se":se.strip()})
+			
+	f.close()
+	return json.dumps({"country":countrycode.upper(), "indicators":list}, sort_keys=True, indent=4)
+
 
 @app.route('/selection/lmic')
 def api_lmic():
@@ -101,12 +164,7 @@ def api_indicators_threshold():
 
 
 
-@app.route('/selection/countries')
-def api_countries():
-	list=""
-	f=open("countries.json")
-	list=f.read()
-	return list
+
 
 @app.route('/selection/indicators')
 def api_indicators():
