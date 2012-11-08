@@ -25,12 +25,13 @@ app = Flask(__name__)
 """
 
 fy13_data="../fy13/"
+index_data=""
 
 
 @app.route('/')
 def api_root():
 	index=""
-	f=open("index.json")
+	f=open(index_data+"index.json")
 	index=f.read()
 	return index
 
@@ -113,6 +114,51 @@ def api_lic():
 		list.append({"country":country})
 	f.close()
 	return json.dumps({"countries":list}, sort_keys=True, indent=4)
+
+@app.route('/selection/lmic/<countrycode>')
+def api_lmic_bycountry(countrycode):
+	list={}
+	columns=[]
+	f=open(fy13_data+"lmic_indicators_fy13.csv")
+	for i, line in enumerate(f):
+		if  i==0:
+			columns=line.strip().split(',')
+			continue
+		if len(line)<1:
+			continue
+		values = line.split(',')
+		country=values[0]
+		if countrycode.lower()==country.lower():
+			for j, value in enumerate(values):
+				if j==0:
+					continue
+				indicator=columns[j][0:len(columns[j])-7].lower().strip()
+				list[indicator]=value.strip()
+	f.close()
+	return json.dumps({"country":countrycode.upper(), "indicators":list}, sort_keys=True, indent=4)
+
+@app.route('/selection/lic/<countrycode>')
+def api_lic_bycountry(countrycode):
+	list={}
+	columns=[]
+	f=open(fy13_data+"lic_indicators_fy13.csv")
+	for i, line in enumerate(f):
+		if  i==0:
+			columns=line.strip().split(',')
+			continue
+		if len(line)<1:
+			continue
+		values = line.split(',')
+		country=values[0]
+		if countrycode.lower()==country.lower():
+			for j, value in enumerate(values):
+				if j==0:
+					continue
+				indicator=columns[j][0:len(columns[j])-7].lower().strip()
+				list[indicator]=value.strip()
+	f.close()
+	return json.dumps({"country":countrycode.upper(), "indicators":list}, sort_keys=True, indent=4)
+
 	
 @app.route('/selection/gni_limits')
 def api_gni_limits():
