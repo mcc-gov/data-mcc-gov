@@ -85,7 +85,7 @@ def api_selection_indicators_bycountry(countrycode):
 			continue
 		country, code, year, value, display, pr, se = line.split(',')
 		if countrycode.lower()==country.lower():
-			list.append({"indicator":code.lower().strip(), "value":value.strip(), "display":display.strip(), "pr":pr.strip(), "se":se.strip()})
+			list.append({"indicator":code.lower().strip(), "year":year.strip(), "value":value.strip(), "display":display.strip(), "pr":pr.strip(), "se":se.strip()})
 			
 	f.close()
 	return json.dumps({"country":countrycode.upper(), "indicators":list}, sort_keys=True, indent=4)
@@ -168,7 +168,7 @@ def api_gni_limits():
 		if len(line)<1 or i==0:
 			continue
 		year, limit, low, high = line.strip().split(',')
-		list.append({"income_category":limit, "low":low, "high":high})
+		list.append({"income_category":limit, "year":year,"low":low, "high":high})
 	f.close()
 	return json.dumps({"gni_limits":list}, sort_keys=True, indent=4)
 
@@ -180,7 +180,7 @@ def api_gni():
 		if len(line)<1 or i==0:
 			continue
 		country, year, gni, override = line.strip().split(',')
-		list.append({"country":country.strip(), "gni":gni.strip(), "override":override.strip()})
+		list.append({"country":country.strip(), "year":year.strip(), "gni":gni.strip(), "override":override.strip()})
 	f.close()
 	return json.dumps({"gni":list}, sort_keys=True, indent=4)
 
@@ -204,7 +204,7 @@ def api_indicators_threshold():
 		if len(line)<1 or i==0:
 			continue
 		code, cat, year, median, se, threshold = line.strip().split(',')
-		list.append({"indicator":code.lower().strip(), "income_category":cat.strip(), "median":median.strip(), "se":se.strip(), "threshold":threshold.strip()})
+		list.append({"indicator":code.lower().strip(), "year":year.strip(), "income_category":cat.strip(), "median":median.strip(), "se":se.strip(), "threshold":threshold.strip()})
 	f.close()
 	return json.dumps({"indicators_threshold":list}, sort_keys=True, indent=4)
 
