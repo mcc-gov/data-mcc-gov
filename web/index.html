@@ -188,6 +188,7 @@
  <script src="lib/underscore-min.js"></script>
  <script src="lib/backbone-min.js"></script>
 
+ <script src="data.json"></script>
 
 <script>
 var getIndex = (function () {
@@ -195,15 +196,32 @@ var getIndex = (function () {
     $.ajax({
         'async': false,
         'global': false,
-        'url': '/raw/index.json',
+        'url': 'data.json',
         'dataType': "json",
         'success': function (data) {
             json = data;
+            alert("data.json is loaded!");
         }
     });
     return json;
 })(); 
-var index=getIndex;
+//var index=getIndex;
+
+var index=data;
+//alert(index);
+
+alert("length: "+index.length);
+
+var f=_.filter(index, function(el){ return el["systemOfRecords"]=="Country Selection Database";})
+alert("selection datasets count: "+f.length);
+
+var apis=_.filter(index, function(el){ return "webService" in el;})
+
+alert("apis count: "+apis.length);
+
+
+
+
 </script>
 
 
@@ -257,6 +275,43 @@ var index=getIndex;
 	<script>
 	(function ($) {
 
+	Metadata = Backbone.Model.extend({
+		title:"",
+		description:"",
+		keyword:"",
+		modified:"",
+		publisher:"",
+		person:"",
+		mbox:"",
+		identifier:"",
+		accessLevel:"",
+
+		dataDictionary:"",
+		accessURL:"", //#TODO fix for multiple urls
+		webService:"",
+		format:"",
+		license:"",
+		spatial:"",
+		temporal:"",
+
+		issued:"",
+		accrualPeriodicity:"",
+		language:"",
+		granularity:"",
+		dataQuality:"",
+		theme:"", //#TODO should it be category instead?
+		references:"", //#TODO how to deal with multiples
+		size:"",
+		landingPage:"",
+		feed:"",
+		systemOfRecord:""
+
+	});
+
+	Catalog = Backbone.Collection.extend({
+		model:Metadata
+	});	
+
 	Dataset = Backbone.Model.extend({
 		name: "",
 		description: "",
@@ -265,7 +320,8 @@ var index=getIndex;
 		location:"",
 		metadatalocation:"",
 		formats: "",
-		id: 0
+		id: 0		
+
 	});
 
 	Group = Backbone.Model.extend({
@@ -427,8 +483,84 @@ var index=getIndex;
 	    }
 	});	
 
-	var datacatalog = new CatalogView();
+	var CatalogView2 = Backbone.View.extend({
+	    machinereadablecategory_el: $("#machine-readable-categories"),
+	    apiscategory_el: $("#apis-category"),
+	    documentscategory_el: $("#documents-categories"),
 
+	    machinereadable_el: $("#machine-readable"),
+	    documents_el: $("#documents"),
+	    apis_el: $("#apis"),
+
+	    initialize: function () {
+	        this.collection = new Datasets(index["datasets"]);
+	        this.categories = new Groups(index["categories"]);
+
+			this.machinereadablegroups = new Groups(this.categories.where({type:"machine-readable"}));
+			this.documentsgroups = new Groups(this.categories.where({type:"documents"}));
+
+			this.machinereadable = new Datasets(this.collection.where({type:"machine-readable"}));
+			this.documents = new Datasets(this.collection.where({type:"documents"}));
+	        this.render();
+	    },
+
+	    render: function () {
+	        var that = this;
+
+	        _.each(this.machinereadablegroups.models, function (item) {
+	            that.renderCategory(item,"machine", this.machinereadable.models);
+	        }, this);
+	        _.each(this.documentsgroups.models, function (item) {
+	            that.renderCategory(item,"document", this.documents.models);
+	        }, this);
+
+	    },
+
+	    renderCategory: function (item, type, datasets) {
+	        var that = this;
+			if (type=="machine") {
+		        var categoryView = new MachineReadableCategoryView({
+		            model: item
+		        });
+		        this.machinereadablecategory_el.append(categoryView.render(this.machinereadablecategory_el).el);
+
+				datasets=new Datasets(datasets).where({group_id:item.id});
+		        _.each(datasets, function (item) {
+		            that.renderDataset(item,"machine");
+		        }, this);				
+			}
+			else {
+		        var categoryView = new DocumentCategoryView({
+		            model: item
+		        });
+		        this.documentscategory_el.append(categoryView.render(this.documentscategory_el).el);
+
+				datasets=new Datasets(datasets).where({group_id:item.id});
+		        _.each(datasets, function (item) {
+		            that.renderDataset(item,"document");
+		        }, this);				
+
+			}
+	    },
+
+	    renderDataset: function (item, type) {
+			if (type=="machine") {
+		        var datasetView = new MachineReadableView({
+		            model: item
+		        });
+		        $("#category-"+item.attributes["group_id"]).append(datasetView.render($("#category-"+item.attributes["group_id"])).el);
+			}
+			else {
+		        var datasetView = new DocumentView({
+		            model: item
+		        });
+		        $("#category-"+item.attributes["group_id"]).append(datasetView.render($("#category-"+item.attributes["group_id"])).el);
+			}
+	    }
+	});	
+
+
+	var datacatalog = new CatalogView2();
 
 
 	})(jQuery);

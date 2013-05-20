@@ -1,0 +1,122 @@
+{% extends "data-mcc-gov.html" %}
+{% block title %}Open Data Catalog{% endblock %}
+{% block content %}
+
+{% include 'intro.html' %}
+
+				      <!-- Example row of columns -->
+				      <div class="row">
+
+
+<div class="span6" id="machine-readable-categories">
+	<h2>Machine-readable data</h2>
+	<p>Data available in machine-readable formats e.g. XML, CSV/XLS, JSON, KML, SHP. </p>
+
+
+	{% for item in data["api"] %}
+	  	    <h3> {{item}}</h3>
+		    <table class="table table-striped"  >
+		    	<thead>
+					<tr>
+						<th width="*">Description</th>
+						<th width="75px">Endpoint</th>
+						<th width="75px">Docs</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dataset in data["api"][item] %}
+	 
+				 		<tr>
+							<td>{{ dataset.description }}</td>
+							<td><a href="{{ dataset.url }}" class="label label-warning">{{ dataset.format }}</a></td>
+							<td><a href="{{ dataset.description }}" class="label">.html</a></td>
+						</tr>	
+	 
+				    {% endfor %}
+				</tbody>
+		    </table>         
+    {% endfor %}
+
+	{% for item in data["machine-readable"] %}
+	  	    <h3> {{item}}</h3>
+		    <table class="table table-striped"  >
+		    	<thead>
+					<tr>
+						<th width="*">Description</th>
+						<th width="75px">Download</th>
+						<th width="75px">Metadata</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dataset in data["machine-readable"][item] %}
+	 
+				 		<tr>
+							<td>{{ dataset.description }}</td>
+							<td><a href="{{ dataset.url }}" class="label label-success">{{ dataset.format }}</a></td>
+							<td><a href="{{ dataset.description }}" class="label">.html</a></td>
+						</tr>	
+	 
+				    {% endfor %}
+				</tbody>
+		    </table>         
+    {% endfor %}
+</div>
+
+<div class="span6"  id="documents-categories">
+	<h2>Documents and reports</h2>
+	<p>Data available in non-machine-readable formats e.g PDFs. </p>
+
+	{% for item in data["external-catalog"] %}
+	  	    <h3> {{item}}</h3>
+		    <table class="table table-striped"  >
+		    	<thead>
+					<tr>
+						<th width="*">Description</th>
+						<th width="75px">Metadata</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dataset in data["external-catalog"][item] %}
+	 
+				 		<tr>
+							<td>{{ dataset.description }}</td>
+							<td><a href="{{ dataset["distribution"][0].accessUrl }}" class="label">{{ dataset["distribution"][0].format }}</a></td>
+						</tr>	
+	 
+				    {% endfor %}
+				</tbody>
+		    </table>         
+    {% endfor %}
+
+	{% for item in data["human-readable"] %}
+	  	    <h3> {{item}}</h3>
+		    <table class="table table-striped"  >
+		    	<thead>
+					<tr>
+						<th width="*">Description</th>
+						<th width="75px">Download</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dataset in data["human-readable"][item] %}
+	 
+				 		<tr>
+							<td>{{ dataset.description }}</td>
+							<td><a href="{{ dataset["distribution"][0].accessUrl }}" class="label label-important">{{ dataset["distribution"][0]["format"] }}</a></td>
+						</tr>	
+	 
+				    {% endfor %}
+				</tbody>
+		    </table>         
+    {% endfor %}
+
+</div>
+				      </div>
+
+				      <hr>
+{% include 'disclaimer.html' %}
+
+				      
+        </div>
+
+{% endblock %}
