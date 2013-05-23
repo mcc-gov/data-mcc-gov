@@ -4,9 +4,12 @@ from flask import render_template
 
 app = Flask(__name__)
 
+#location of data.json folder on server e.g. /var/www/smthing
+root=""
+
 @app.route('/')
 def hello_world():
-	f=open("data.json")
+	f=open(root+"data.json")
 
 	data = json.loads(f.read())
 	f.close()
@@ -38,9 +41,18 @@ def hello_world():
 	print meta
 	return render_template('home.html', data=meta)
 
-@app.route('/meta/<name>')
-def hello(name=None):
-	return render_template('hello.html', name=name)
+@app.route('/metadata/<identifier>')
+def hello(identifier=None):
+	f=open(root+"data.json")
+	data = json.loads(f.read())
+	f.close()
+
+	meta={}
+	for item in data:
+		if item["identifier"]==identifier:
+			meta=item
+			break
+	return render_template('meta.html', meta=meta)
 
 if __name__ == '__main__':
 	app.debug = True

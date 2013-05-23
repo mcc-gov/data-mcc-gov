@@ -1,0 +1,45 @@
+{% extends "data-mcc-gov.html" %}
+{% block title %}Open Data Catalog{% endblock %}
+{% block content %}
+
+
+				      <!-- Example row of columns -->
+				      <div class="row">
+
+
+<div class="span12" >
+	<h2>Machine-readable data</h2>
+	<p>Data available in machine-readable formats e.g. XML, CSV/XLS, JSON, KML, SHP. </p>
+
+
+	  	    <h3> Metadata </h3>
+		    <table class="table table-striped"  >
+		    	<thead>
+					<tr>
+						<th width="100px">Key</th>
+						<th width="*">Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in meta %}
+	 
+				 		<tr>
+							<td>{{ item }}</td>
+							<td>{{ meta[item] }}</td>
+						</tr>	
+	 
+				    {% endfor %}
+				</tbody>
+		    </table>         
+    
+</div>
+
+
+				      </div>
+
+				      <hr>
+
+				      
+        </div>
+
+{% endblock %}

@@ -22,6 +22,14 @@
             {
                 "accessURL": "http://data.mcc.gov/raw/performance/projects.csv", 
                 "format": "csv"
+            },
+            {
+                "accessURL": "http://data.mcc.gov/raw/performance/projects.csv", 
+                "format": "json"
+            },
+            {
+                "accessURL": "http://data.mcc.gov/raw/performance/projects.csv", 
+                "format": "xml"
             }
         ], 
         "landingPage": "http://data.mcc.gov"

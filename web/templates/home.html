@@ -28,8 +28,8 @@
 	 
 				 		<tr>
 							<td>{{ dataset.description }}</td>
-							<td><a href="{{ dataset.url }}" class="label label-warning">{{ dataset.format }}</a></td>
-							<td><a href="{{ dataset.description }}" class="label">.html</a></td>
+							<td><a href="{{ dataset.webService }}" class="label label-warning">{{ dataset.format }}</a></td>
+							<td><a href="metadata/{{ dataset.identifier }}" class="label">.html</a></td>
 						</tr>	
 	 
 				    {% endfor %}
@@ -52,8 +52,12 @@
 	 
 				 		<tr>
 							<td>{{ dataset.description }}</td>
-							<td><a href="{{ dataset.url }}" class="label label-success">{{ dataset.format }}</a></td>
-							<td><a href="{{ dataset.description }}" class="label">.html</a></td>
+							<td>
+								{% for distr in dataset.distribution %}
+								<a href="{{ distr.accessURL }}" class="label label-success">{{ distr.format }}</a>
+							    {% endfor %}
+							</td>
+							<td><a href="metadata/{{ dataset.identifier }}" class="label">.html</a></td>
 						</tr>	
 	 
 				    {% endfor %}
@@ -80,7 +84,11 @@
 	 
 				 		<tr>
 							<td>{{ dataset.description }}</td>
-							<td><a href="{{ dataset["distribution"][0].accessUrl }}" class="label">{{ dataset["distribution"][0].format }}</a></td>
+							<td>
+								{% for distr in dataset.distribution %}
+								<a href="{{ distr.accessURL }}" class="label">{{ distr.format }}</a>
+							    {% endfor %}
+							</td>
 						</tr>	
 	 
 				    {% endfor %}
@@ -102,7 +110,11 @@
 	 
 				 		<tr>
 							<td>{{ dataset.description }}</td>
-							<td><a href="{{ dataset["distribution"][0].accessUrl }}" class="label label-important">{{ dataset["distribution"][0]["format"] }}</a></td>
+							<td>
+								{% for distr in dataset.distribution %}
+								<a href="{{ distr.accessURL }}" class="label label-important">{{ distr.format }}</a>
+							    {% endfor %}
+							</td>
 						</tr>	
 	 
 				    {% endfor %}
