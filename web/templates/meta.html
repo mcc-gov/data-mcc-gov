@@ -22,11 +22,21 @@
 				</thead>
 				<tbody>
 					{% for item in meta %}
-	 
-				 		<tr>
-							<td>{{ item }}</td>
-							<td>{{ meta[item] }}</td>
-						</tr>	
+					    {% if item=="distribution" %}
+					 		<tr>
+								<td>{{ item }}</td>
+								<td>{% for distr in meta[item] %}
+										[{{distr["format"]}}] {{distr["accessURL"]}}<br/>
+
+									{% endfor %}
+								</td>	
+							</tr>	
+					    {% else %}
+					 		<tr>
+								<td>{{ item }}</td>
+								<td>{{ meta[item] }}</td>
+							</tr>	
+					    {% endif %}	 					
 	 
 				    {% endfor %}
 				</tbody>

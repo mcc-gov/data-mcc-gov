@@ -41,7 +41,6 @@ def hello_world():
 				meta["machine-readable"][item["theme"]]=[]
 			meta["machine-readable"][item["theme"]].append(item)
 
-	print meta
 	return render_template('home.html', data=meta)
 
 @app.route('/metadata/<identifier>')
@@ -53,6 +52,7 @@ def hello(identifier=None):
 	meta={}
 	for item in data:
 		if item["identifier"]==identifier:
+
 			meta=item
 			break
 	return render_template('meta.html', meta=meta)
