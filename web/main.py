@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 #location of data.json folder on server e.g. /var/www/smthing
 root="/var/www/raw/"
+#root=""
 
 @app.route('/')
 def hello_world():
